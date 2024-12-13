@@ -3,15 +3,21 @@ Name: Roei Lev
 ID: 216015164
 Assignment: ex4
 *******************/
+#include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 
 #define ROWS 5
 #define COLUMNS 5
+#define GRID 20
+
 
 int task1_robot_paths(int row, int column);
 float task2_human_pyramid(int row, int column, float humanPyramid[][COLUMNS], int rowNum);
-void task3_parenthesis_validator();
+int task3_parenthesis_validator(char c);
+int isOpenBracket(char c);
+int isClosedBracket(char c);
+char getOtherBracket(char c);
 void task4_queens_battle();
 void task5_crossword_generator();
 
@@ -76,14 +82,39 @@ int main()
                     break;
                 }
             case 3:
-                task3_parenthesis_validator();
-                break;
+                {
+                    int check;
+                    char temp;
+                    printf("Please enter a term for validation:\n");
+                    scanf(" %c", &temp);
+                    if(isOpenBracket(temp))
+                    {
+                        temp = getOtherBracket(temp);
+                        check = task3_parenthesis_validator(temp);
+                    }
+                    else if(isClosedBracket(temp))
+                    {
+                        temp = getOtherBracket(temp);
+                        check = task3_parenthesis_validator(temp);
+                    }
+                    if(check == 1)
+                        printf("The parentheses are balanced correctly.\n");
+                    else
+                        printf("The parentheses are not balanced correctly.\n");
+                    break;
+                }
             case 4:
                 task4_queens_battle();
                 break;
             case 5:
-                task5_crossword_generator();
-                break;
+                {
+                    int n = 0;
+                    char grid [GRID][GRID];
+                    printf("Please enter the dimensions of the crossword grid:\n");
+                    scanf("%d", &n);
+                    task5_crossword_generator();
+                    break;
+                }
             case 6:
                 printf("Goodbye!\n");
                 break;
@@ -123,12 +154,64 @@ float task2_human_pyramid(int row, int column, float humanPyramid[][COLUMNS], in
 
     return weight1/2 + weight2/2 + humanPyramid[row][column];
 }
-
-void task3_parenthesis_validator()
+int task3_parenthesis_validator(char c)
 {
-    // Todo
+    char current = 'x';
+    int flag = scanf("%c", &current);
+    if(flag == -1 || current == '\n')
+    {
+        if(isClosedBracket(c))
+            return 0;
+        return 1;
+    }
+    if(current == c)
+    {
+        return 1;
+    }
+    if(isClosedBracket(current))
+    {
+        return task3_parenthesis_validator(c) && 0;
+    }
+    if(isOpenBracket(current))
+    {
+        char temp = getOtherBracket(current);
+        int check = task3_parenthesis_validator(temp);
+        return check && task3_parenthesis_validator(c);
+    }
+    return task3_parenthesis_validator(c);
 }
-
+int isOpenBracket(char c)
+{
+    if(c == '(' || c == '{' || c == '[' || c == '<')
+        return 1;
+    return 0;
+}
+int isClosedBracket(char c)
+{
+    if(c == ')' || c == '}' || c == ']' || c == '>')
+        return 1;
+    return 0;
+}
+char getOtherBracket(char c)
+{
+    if(c == '(')
+        return ')';
+    if(c == '[')
+        return ']';
+    if(c == '{')
+        return '}';
+    if(c == '<')
+        return '>';
+    if(c == ')')
+        return '(';
+    if(c == ']')
+        return '[';
+    if(c == '}')
+        return '{';
+    if(c == '>')
+        return '<';
+    return 0;
+}
 void task4_queens_battle()
 {
     // Todo
