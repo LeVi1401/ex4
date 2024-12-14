@@ -170,9 +170,11 @@ int task3_parenthesis_validator(char c, int i)
     {
         if(i == 0)
         {
-            scanf(" %c", &current);
+            flag = scanf("%c", &current);
             if(isClosedBracket(current))
                 current = getOtherBracket(current);
+            if(flag == -1 || current == '\n')
+                return 1;
             return task3_parenthesis_validator(current, 0);
         }
         return 1;
