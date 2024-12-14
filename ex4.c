@@ -97,6 +97,8 @@ int main()
                         temp = getOtherBracket(temp);
                         check = task3_parenthesis_validator(temp);
                     }
+                    else
+                        check = task3_parenthesis_validator(temp);
                     if(check == 1)
                         printf("The parentheses are balanced correctly.\n");
                     else
@@ -164,12 +166,10 @@ int task3_parenthesis_validator(char c)
             return 0;
         return 1;
     }
-    if(current == c)
-    {
-        return 1;
-    }
     if(isClosedBracket(current))
     {
+        if(current == c)
+            return 1;
         return task3_parenthesis_validator(c) && 0;
     }
     if(isOpenBracket(current))
