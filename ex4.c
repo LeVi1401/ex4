@@ -14,7 +14,7 @@ Assignment: ex4
 
 int task1_robot_paths(int row, int column);
 float task2_human_pyramid(int row, int column, float humanPyramid[][COLUMNS], int rowNum);
-int task3_parenthesis_validator(char c);
+int task3_parenthesis_validator(char c, int i);
 int isOpenBracket(char c);
 int isClosedBracket(char c);
 char getOtherBracket(char c);
@@ -87,18 +87,7 @@ int main()
                     char temp;
                     printf("Please enter a term for validation:\n");
                     scanf(" %c", &temp);
-                    if(isOpenBracket(temp))
-                    {
-                        temp = getOtherBracket(temp);
-                        check = task3_parenthesis_validator(temp);
-                    }
-                    else if(isClosedBracket(temp))
-                    {
-                        temp = getOtherBracket(temp);
-                        check = task3_parenthesis_validator(temp);
-                    }
-                    else
-                        check = task3_parenthesis_validator(temp);
+                    check = task3_parenthesis_validator(temp, 0);
                     if(check == 1)
                         printf("The parentheses are balanced correctly.\n");
                     else
@@ -156,8 +145,19 @@ float task2_human_pyramid(int row, int column, float humanPyramid[][COLUMNS], in
 
     return weight1/2 + weight2/2 + humanPyramid[row][column];
 }
-int task3_parenthesis_validator(char c)
+int task3_parenthesis_validator(char c, int i)
 {
+    if(i == 0)
+    {
+        if(isOpenBracket(c))
+        {
+            c = getOtherBracket(c);
+        }
+        else if(isClosedBracket(c))
+        {
+            c = getOtherBracket(c);
+        }
+    }
     char current = 'x';
     int flag = scanf("%c", &current);
     if(flag == -1 || current == '\n')
@@ -166,19 +166,28 @@ int task3_parenthesis_validator(char c)
             return 0;
         return 1;
     }
+    if(current == c)
+    {
+        if(i == 0)
+        {
+            scanf(" %c", &current);
+            if(isClosedBracket(current))
+                current = getOtherBracket(current);
+            return task3_parenthesis_validator(current, 0);
+        }
+        return 1;
+    }
     if(isClosedBracket(current))
     {
-        if(current == c)
-            return 1;
-        return task3_parenthesis_validator(c) && 0;
+        return task3_parenthesis_validator(c, i + 1) && 0;
     }
     if(isOpenBracket(current))
     {
         char temp = getOtherBracket(current);
-        int check = task3_parenthesis_validator(temp);
-        return check && task3_parenthesis_validator(c);
+        int check = task3_parenthesis_validator(temp, i + 1);
+        return check && task3_parenthesis_validator(c, i + 1);
     }
-    return task3_parenthesis_validator(c);
+    return task3_parenthesis_validator(c, i + 1);
 }
 int isOpenBracket(char c)
 {
