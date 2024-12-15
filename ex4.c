@@ -11,7 +11,6 @@ Assignment: ex4
 #define COLUMNS 5
 #define GRID 20
 
-char solve [GRID][GRID];
 
 int task1_robot_paths(int row, int column);
 float task2_human_pyramid(int row, int column, float humanPyramid[][COLUMNS], int rowNum);
@@ -24,7 +23,7 @@ int placeQueen(int row, int column, char invalidArea [], int areaAmount, char ar
 int isAreaValid(char invalidArea [], int areaAmount, int i, char area);
 int canPlaceQueen(int i, int j, char solve [][GRID], int n);
 int checkColumn(int row, int column, int i, char solve[][GRID]);
-int checkDiagonals(int row, int column, int j, char solve[][GRID], int n);
+int checkAdjacent(int row, int column, char solve[][GRID], int n);
 void printSolve(char solve [][GRID], int n);
 void task5_crossword_generator();
 
@@ -148,25 +147,9 @@ int main()
                     for(int i = 0 ; i < n; i++)
                         for(int j = 0 ; j < n; j++)
                             solve[i][j] = '*';
-                    /*for(int i = 0 ; i < n; i++)
-                    {
-                        for(int j = 0 ; j < n; j++)
-                            printf("%d: %c ", (i + j), solve[i][j]);
-                        printf("\n");
-                    }
-                    for(int i = 0 ; i < n; i++)
-                    {
-                        isSolvable = canPlaceQueen(2, i, solve, n);
-                        if(isSolvable)
-                            printf("The puzzle board is valid.\n");
-                        else
-                            printf("The puzzle board is invalid.\n");
-                    }*/
-                    //isSolvable = task4_queens_battle(0, 0, invalidArea, 0, board, solve, n);
-                    //printSolve(solve, n);
-                    isSolvable = canPlaceQueen(2, 3, solve, n);
+                    isSolvable = task4_queens_battle(0, 0, invalidArea, 0, board, solve, n);
                     if(isSolvable)
-                        printf("The puzzle board is valid.\n");
+                        printSolve(solve, n);
                     else
                         printf("The puzzle board is invalid.\n");
                     break;
@@ -297,7 +280,7 @@ char getOtherBracket(char c)
         return '<';
     return 0;
 }
-/*
+
 int task4_queens_battle(int row, int column, char invalidArea[], int areaAmount, char board [][GRID], char solve [][GRID], int n)
 {
     if(column == n)
@@ -306,43 +289,51 @@ int task4_queens_battle(int row, int column, char invalidArea[], int areaAmount,
     }
     if(row == n)
     {
-        if(areaAmount == n)
-            return 1;
-        return 0;
-    }
-    char area = board[row][column];
-    int queen = placeQueen(row, column, invalidArea, areaAmount, area, board, solve, n);
-    if(queen)
-    {
-        printBoard(solve, n);
-        if(areaAmount < n)
-        {
-            //invalidArea[areaAmount++] = area;
-            areaAmount++;
-        }
-        column = 0;
-        int check = task4_queens_battle(row + 1, column, invalidArea, areaAmount, board, solve, n);
-        if(check)
-            return 1;
-        solve[row][column] = '*';
-        //areaAmount--;
-        return task4_queens_battle(row, column + 1, invalidArea, areaAmount, board, solve, n);;
-    }
-    return task4_queens_battle(row, column + 1, invalidArea, areaAmount, board, solve, n);
-}*/
-int task4_queens_battle(int row, int column, char invalidArea[], int areaAmount, char board [][GRID], char solve [][GRID], int n)
-{
-    if(column >= n)
-    {
-        return 0;
-    }
-    if(row >= n)
-    {
         return 1;
     }
     char area = board[row][column];
     if(placeQueen(row, column, invalidArea, areaAmount, area, solve, n))
     {
+        if(row == 0 && column == 3)
+        {
+            char x = invalidArea[areaAmount];
+        }
+        if(row == 1 && column == 8)
+        {
+            char x = invalidArea[areaAmount];
+        }
+        if(row == 2 && column == 0)
+        {
+            char x = invalidArea[areaAmount];
+        }
+        if(row == 3 && column == 9)
+        {
+            char x = invalidArea[areaAmount];
+        }
+        if(row == 4 && column == 2)
+        {
+            char x = invalidArea[areaAmount];
+        }
+        if(row == 5 && column == 5)
+        {
+            char x = invalidArea[areaAmount];
+        }
+        if(row == 6 && column == 1)
+        {
+            char x = invalidArea[areaAmount];
+        }
+        if(row == 7 && column == 6)
+        {
+            char x = invalidArea[areaAmount];
+        }
+        if(row == 8 && column == 4)
+        {
+            char x = invalidArea[areaAmount];
+        }
+        if(row == 9 && column == 7)
+        {
+            char x = invalidArea[areaAmount];
+        }
         solve[row][column] = 'X';
         if(areaAmount < n)
         {
@@ -352,12 +343,14 @@ int task4_queens_battle(int row, int column, char invalidArea[], int areaAmount,
         int check = task4_queens_battle(row + 1, 0, invalidArea, areaAmount, board, solve, n);
         if(check == 0)
         {
-            areaAmount--;
-            invalidArea[areaAmount] = ' ';
             solve[row][column] = '*';
+            if (areaAmount > 0)
+            {
+                invalidArea[--areaAmount] = ' ';
+            }
             return task4_queens_battle(row, column + 1, invalidArea, areaAmount, board, solve, n);
         }
-        return check;
+        return 1;
     }
     return task4_queens_battle(row, column + 1, invalidArea, areaAmount, board, solve, n);
 }
@@ -379,8 +372,7 @@ int isAreaValid(char invalidArea [], int areaAmount, int i, char area)
 }
 int canPlaceQueen(int i, int j, char solve [][GRID], int n)
 {
-    //return checkColumn(i, j, 0, solve) && checkDiagonals(i, j, j, solve, n);
-    return checkDiagonals(i, j, j, solve, n);
+    return checkColumn(i, j, 0, solve) && checkAdjacent(i, j, solve, n);
 }
 int checkColumn(int row, int column, int i, char solve[][GRID])
 {
@@ -394,25 +386,29 @@ int checkColumn(int row, int column, int i, char solve[][GRID])
     return checkColumn(row, column, i + 1, solve);
 }
 
-int checkDiagonals(int row, int column, int j, char solve[][GRID], int n)
+int checkAdjacent(int row, int column, char solve[][GRID], int n)
 {
-    if (row < 0 || j >= n || j < 0)
+
+    if(row == 0)
     {
         return 1;
     }
-    if (solve[row][j] == 'X')
+    if(column == 0)
     {
-        return 0;
+        int upperRight = (solve[row-1][column+1] != 'X');
+        int upperMid = (solve[row-1][column] != 'X');
+        return upperRight && upperMid;
     }
-    if (j == column)
+    if(column == n)
     {
-        return checkDiagonals(row - 1, column, j + 1, solve, n) && checkDiagonals(row - 1, column, j - 1, solve, n);
+        int upperMid = (solve[row-1][column] != 'X');
+        int upperLeft = (solve[row-1][column-1] != 'X');
+        return upperMid && upperLeft;
     }
-    if (j > column)
-    {
-        return checkDiagonals(row - 1, column, j + 1, solve, n);
-    }
-    return checkDiagonals(row - 1, column, j - 1, solve, n);
+    int upperRight = (solve[row-1][column+1] != 'X');
+    int upperMid = (solve[row-1][column] != 'X');
+    int upperLeft = (solve[row-1][column-1] != 'X');
+    return upperRight && upperMid && upperLeft;
 }
 void printSolve(char solve [][GRID], int n)
 {
@@ -424,7 +420,7 @@ void printSolve(char solve [][GRID], int n)
                 printf("X");
             else
                 printf("*");
-            if(j == n - 1)
+            if(j != n - 1)
                 printf(" ");
         }
         printf("\n");
