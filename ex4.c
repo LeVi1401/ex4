@@ -231,6 +231,16 @@ float task2_human_pyramid(int row, int column, float humanPyramid[][COLUMNS], in
 }
 int task3_parenthesis_validator(char c, int i)
 {
+    if(i == -1)
+    {
+        char current = 'x';
+        int flag = scanf("%c", &current);
+        if(flag == -1 || current == '\n')
+        {
+            return 0;
+        }
+        return task3_parenthesis_validator(c, i);
+    }
     if(i == 0)
     {
         if(isOpenBracket(c))
@@ -265,7 +275,7 @@ int task3_parenthesis_validator(char c, int i)
     }
     if(isClosedBracket(current))
     {
-        return task3_parenthesis_validator(c, i + 1) && 0;
+        return task3_parenthesis_validator('x', -1) && 0;
     }
     if(isOpenBracket(current))
     {
