@@ -126,7 +126,7 @@ int main()
                     //gets first character
                     printf("Please enter a term for validation:\n");
                     scanf("%*[\n]");
-                    check = task3_parenthesis_validator('x', 0);
+                    check = task3_parenthesis_validator('x', 1);
                     if(check == 1)
                         printf("The parentheses are balanced correctly.\n");
                     else
@@ -294,17 +294,17 @@ int task3_parenthesis_validator(char c, int i)
     //checks whether the bracket is closed incorrectly (example:"(]")
     if(isClosedBracket(current))
     {
-        return task3_parenthesis_validator('x', -1) && 0;
+        return task3_parenthesis_validator('x', -1);
     }
     //checks whether there is another open bracket before the current one is closed (or it's the first one)
     if(isOpenBracket(current))
     {
         //calls for the function to check if the new bracket is closed correctly and then checks if the current one is
         char temp = getOtherBracket(current);
-        int check = task3_parenthesis_validator(temp, i + 1);
-        return check && task3_parenthesis_validator(c, i + 1);
+        int check = task3_parenthesis_validator(temp, i);
+        return check && task3_parenthesis_validator(c, i);
     }
-    return task3_parenthesis_validator(c, i + 1);
+    return task3_parenthesis_validator(c, i);
 }
 //checks if the char is ( / { / [ / < or not
 int isOpenBracket(char c)
