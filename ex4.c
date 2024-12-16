@@ -10,7 +10,10 @@ Assignment: ex4
 #define ROWS 5
 #define COLUMNS 5
 #define GRID 20
-
+#define SIZE 30
+#define SLOTS 100
+#define POS 3
+#define WORD_LEN 15
 
 int task1_robot_paths(int row, int column);
 float task2_human_pyramid(int row, int column, float humanPyramid[][COLUMNS], int rowNum);
@@ -25,42 +28,12 @@ int canPlaceQueen(int i, int j, char solve [][GRID], int n);
 int checkColumn(int row, int column, int i, char solve[][GRID]);
 int checkAdjacent(int row, int column, char solve[][GRID], int n);
 void printSolve(char solve [][GRID], int n);
-void task5_crossword_generator();
+int task5_crossword_generator(int slots[][POS], char type[], int i, char words[][WORD_LEN], int usedWords[], int j, char solve[][SIZE], int wordsNum);
+int placeWord(int slots[][POS], char type[], int i, char words[][WORD_LEN], int usedWords[], int j, char solve[][SIZE]);
+int placeWordVertical(int length, char word[], char solve [][SIZE], int row, int column, int j);
+int placeWordHorizontal(int length, char word[], char solve [][SIZE], int row, int column, int i);
+void makeCopy(char new[][SIZE], char board[][SIZE], int n, int i, int j);
 
-int solveQueen(int row, int column, int n, char board [][GRID], char solve [][GRID])
-{
-    if(row >= n)
-        return 1;
-    if(column >= n)
-        return 0;
-    int safe = placeQueen(row, column, NULL, 0, ' ', solve, n);
-    if(safe)
-    {
-        solve[row][column] = 'X';
-
-        if(solveQueen(row + 1, 0, n, board, solve))
-            return 1;
-
-        board[row][column] = '*';
-    }
-    else
-    {
-        if(solveQueen(row, column + 1, n, board, solve))
-            return 1;
-    }
-    return 0;
-}
-
-void printBoard(char board[][GRID], int n)
-{
-    for(int i = 0 ; i < n; i++)
-    {
-        for(int j = 0 ; j < n; j++)
-            printf("%c", board[i][j]);
-        printf("\n");
-    }
-    printf("\n");
-}
 int main()
 {
     int task = -1;
@@ -156,11 +129,53 @@ int main()
                 }
             case 5:
                 {
-                    int n = 0;
-                    char grid [GRID][GRID];
+                    int n = 0, slot = 0;
+                    char grid [SIZE][SIZE], type[SLOTS];
+                    int usedWords[SLOTS] = {0}, slots[SLOTS][POS];
                     printf("Please enter the dimensions of the crossword grid:\n");
                     scanf("%d", &n);
-                    task5_crossword_generator();
+                    printf("Please enter the number of slots in the crossword:\n");
+                    scanf("%d", &slot);
+                    printf("Please enter the details for each slot (Row, Column, Length, Direction):\n");
+                    for(int i = 0 ; i < slot ; i++)
+                    {
+                        for(int j = 0 ; j < POS ; j++)
+                        {
+                            scanf("%d", &slots[i][j]);
+                        }
+                        scanf(" %c", &type[i]);
+                    }
+                    for(int i = 0 ; i < n ; i++)
+                        for(int j = 0 ; j < n ; j++)
+                            grid[i][j] = '#';
+                    for(int i = 0 ; i < slot ; i++)
+                    {
+                        if(type[i] == 'V')
+                        {
+                            int index = slots[i][1];
+                            for(int j = slots[i][0] ; j < (slots[i][2] + slots[i][0]) ; j++)
+                            {
+                                grid[j][index] = 'X';
+                            }
+                        }
+                        else if(type[i] == 'H')
+                        {
+                            int index = slots[i][0];
+                            for(int j = slots[i][1] ; j < (slots[i][2] + slots[i][1]) ; j++)
+                            {
+                                grid[index][j] = 'X';
+                            }
+                        }
+                    }
+                    for(int i = 0 ; i < n ; i++)
+                    {
+                        for(int j = 0 ; j < n ; j++)
+                        {
+                            printf("%c", grid[i][j]);
+                        }
+                        printf("\n");
+                    }
+                    //task5_crossword_generator();
                     break;
                 }
             case 6:
@@ -283,57 +298,17 @@ char getOtherBracket(char c)
 
 int task4_queens_battle(int row, int column, char invalidArea[], int areaAmount, char board [][GRID], char solve [][GRID], int n)
 {
-    if(column == n)
+    if(column >= n)
     {
         return 0;
     }
-    if(row == n)
+    if(row >= n)
     {
         return 1;
     }
     char area = board[row][column];
     if(placeQueen(row, column, invalidArea, areaAmount, area, solve, n))
     {
-        if(row == 0 && column == 3)
-        {
-            char x = invalidArea[areaAmount];
-        }
-        if(row == 1 && column == 8)
-        {
-            char x = invalidArea[areaAmount];
-        }
-        if(row == 2 && column == 0)
-        {
-            char x = invalidArea[areaAmount];
-        }
-        if(row == 3 && column == 9)
-        {
-            char x = invalidArea[areaAmount];
-        }
-        if(row == 4 && column == 2)
-        {
-            char x = invalidArea[areaAmount];
-        }
-        if(row == 5 && column == 5)
-        {
-            char x = invalidArea[areaAmount];
-        }
-        if(row == 6 && column == 1)
-        {
-            char x = invalidArea[areaAmount];
-        }
-        if(row == 7 && column == 6)
-        {
-            char x = invalidArea[areaAmount];
-        }
-        if(row == 8 && column == 4)
-        {
-            char x = invalidArea[areaAmount];
-        }
-        if(row == 9 && column == 7)
-        {
-            char x = invalidArea[areaAmount];
-        }
         solve[row][column] = 'X';
         if(areaAmount < n)
         {
@@ -426,7 +401,116 @@ void printSolve(char solve [][GRID], int n)
         printf("\n");
     }
 }
-void task5_crossword_generator()
+int task5_crossword_generator(int slots[][POS], char type[], int i, char words[][WORD_LEN], int usedWords[], int j, char solve[][SIZE], int wordsNum)
 {
-    // Todo
+    char temp[SIZE][SIZE];
+    makeCopy(temp, solve, SIZE, 0, 0);
+    if (i >= wordsNum)
+    {
+        return 1;
+    }
+    if(j >= wordsNum)
+    {
+        return 0;
+    }
+    if(placeWord(slots, type, i, words, usedWords, j, temp))
+    {
+        usedWords[j] = 1;
+        int check = task5_crossword_generator(slots, type, i + 1, words, usedWords, 0, temp, wordsNum);
+        if(check == 0)
+        {
+            usedWords[j] = 0;
+            return task5_crossword_generator(slots, type, i, words, usedWords, j + 1, solve, wordsNum);
+        }
+        placeWord(slots, type, i, words, usedWords, j, solve);
+        return 1;
+    }
+    return task5_crossword_generator(slots, type, i, words, usedWords, j + 1, solve, wordsNum);
+
+
+}
+int placeWord(int slots[][POS], char type[], int i, char words[][WORD_LEN], int usedWords[], int j, char solve[][SIZE])
+{
+    int row = slots[i][0];
+    int column = slots[i][1];
+    int length = slots[i][2];
+    if(strlen(words[j]) != length)
+    {
+        return 0;
+    }
+    if(usedWords[j] == 1)
+    {
+        return 0;
+    }
+    if(type[i] == 'V')
+        return placeWordVertical(length, words[j], solve, row, column, 0);
+    if(type[i] == 'H')
+        return placeWordHorizontal(length, words[j], solve, row, column, 0);
+    return 0;
+}
+int placeWordVertical(int length, char word[], char solve [][SIZE], int row, int column, int j)
+{
+    if(j >= length)
+    {
+        return 1;
+    }
+    if(solve[row][column] == word[j])
+    {
+        int check = placeWordVertical(length, word, solve, row + 1, column, j + 1);
+        if(check == 0)
+        {
+            return 0;
+        }
+        return 1;
+    }
+    if(solve[row][column] == ' ')
+    {
+        solve[row][column] = word[j];
+        int check = placeWordVertical(length, word, solve, row + 1, column, j + 1);
+        if(check == 0)
+        {
+            solve[row][column] = ' ';
+            return 0;
+        }
+        return 1;
+    }
+    return 0;
+}
+int placeWordHorizontal(int length, char word[], char solve [][SIZE], int row, int column, int i)
+{
+    if(i >= length)
+    {
+        return 1;
+    }
+    if(solve[row][column] == word[i])
+    {
+        int check = placeWordHorizontal(length, word, solve, row, column + 1, i + 1);
+        if(check == 0)
+        {
+            return 0;
+        }
+        return 1;
+    }
+    if(solve[row][column] == ' ')
+    {
+        solve[row][column] = word[i];
+        int check = placeWordHorizontal(length, word, solve, row, column + 1, i + 1);
+        if(check == 0)
+        {
+            solve[row][column] = ' ';
+            return 0;
+        }
+        return 1;
+    }
+    return 0;
+}
+void makeCopy(char new[][SIZE], char board[][SIZE], int n, int i, int j)
+{
+    if(i < n)
+    {
+        new[i][j] = board[i][j];
+        if(j < n)
+            makeCopy(new, board, n, i, j + 1);
+        makeCopy(new, board, n, i + 1, 0);
+    }
 }
