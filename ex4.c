@@ -130,7 +130,7 @@ int main()
             case 5:
                 {
                     int n = 0, slot = 0;
-                    char grid [SIZE][SIZE], type[SLOTS];
+                    char grid [SIZE][SIZE], type[SLOTS], words[SLOTS][WORD_LEN];
                     int usedWords[SLOTS] = {0}, slots[SLOTS][POS];
                     printf("Please enter the dimensions of the crossword grid:\n");
                     scanf("%d", &n);
@@ -155,7 +155,7 @@ int main()
                             int index = slots[i][1];
                             for(int j = slots[i][0] ; j < (slots[i][2] + slots[i][0]) ; j++)
                             {
-                                grid[j][index] = 'X';
+                                grid[j][index] = ' ';
                             }
                         }
                         else if(type[i] == 'H')
@@ -163,7 +163,7 @@ int main()
                             int index = slots[i][0];
                             for(int j = slots[i][1] ; j < (slots[i][2] + slots[i][1]) ; j++)
                             {
-                                grid[index][j] = 'X';
+                                grid[index][j] = ' ';
                             }
                         }
                     }
@@ -175,7 +175,7 @@ int main()
                         }
                         printf("\n");
                     }
-                    //task5_crossword_generator();
+                    task5_crossword_generator();
                     break;
                 }
             case 6:
