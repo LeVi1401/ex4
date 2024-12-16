@@ -178,9 +178,7 @@ int main()
                     printf("Please enter the words for the dictionary:\n");
                     for(int i = 0 ; i < wordCount ; i++)
                     {
-                        char tempWord[WORD_LEN];
-                        scanf("%s", &tempWord[i]);
-                        strcpy(tempWord, words[i]);
+                        scanf("%s", words[i]);
                     }
                     int check = task5_crossword_generator(slots, type, 0, words, usedWords, 0, grid, slot, wordCount, n);
                     if(check)
