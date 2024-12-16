@@ -422,7 +422,7 @@ int task5_crossword_generator(int slots[][POS], char type[], int i, char words[]
             usedWords[j] = 0;
             return task5_crossword_generator(slots, type, i, words, usedWords, j + 1, solve, wordsNum);
         }
-        placeWord(slots, type, i, words, usedWords, j, solve);
+        makeCopy(solve, temp, SIZE, 0, 0);
         return 1;
     }
     return task5_crossword_generator(slots, type, i, words, usedWords, j + 1, solve, wordsNum);
