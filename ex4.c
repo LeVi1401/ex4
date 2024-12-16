@@ -104,6 +104,7 @@ int main()
                         break;
                     }
                     //prints the weights
+                    printf("The total weight on each cheerleader is:\n");
                     for(int i = ROWS - 1; i >= 0; i--)
                     {
                         for(int j = 0; j < COLUMNS - i; j++)
@@ -122,11 +123,10 @@ int main()
             case 3:
                 {
                     int check;
-                    char temp;
                     //gets first character
                     printf("Please enter a term for validation:\n");
-                    scanf(" %c", &temp);
-                    check = task3_parenthesis_validator(temp, 0);
+                    scanf("%*[\n]");
+                    check = task3_parenthesis_validator('x', 0);
                     if(check == 1)
                         printf("The parentheses are balanced correctly.\n");
                     else
@@ -139,7 +139,7 @@ int main()
                     int n = 0, isSolvable = 0;
                     printf("Please enter the board dimensions:\n");
                     scanf("%d", &n);
-                    printf("Please enter the %d*%d puzzle board\n", n, n);
+                    printf("Please enter a %d*%d puzzle board:\n", n, n);
                     //gets the puzzle board
                     for(int i = 0 ; i < n; i++)
                         for(int j = 0 ; j < n; j++)
@@ -150,9 +150,12 @@ int main()
                             solve[i][j] = '*';
                     isSolvable = task4_queens_battle(0, 0, invalidArea, 0, board, solve, n);
                     if(isSolvable)
+                    {
+                        printf("Solution:\n");
                         printSolve(solve, n);
+                    }
                     else
-                        printf("The puzzle board is invalid.\n");
+                        printf("This puzzle cannot be solved.\n");
                     break;
                 }
             case 5:
@@ -213,10 +216,7 @@ int main()
                     }
                     int check = task5_crossword_generator(slots, type, 0, words, usedWords, 0, grid, slot, wordCount, n);
                     if(check)
-                    {
-                        printf("The crosswords are balanced correctly.\n");
                         printCrossword(grid, n);
-                    }
                     else
                         printf("This crossword cannot be solved.\n");
                     break;
@@ -276,18 +276,6 @@ int task3_parenthesis_validator(char c, int i)
         }
         return task3_parenthesis_validator(c, i);
     }
-    //gets one char from main so it changes it to not affect the function
-    if(i == 0)
-    {
-        if(isOpenBracket(c))
-        {
-            c = getOtherBracket(c);
-        }
-        else if(isClosedBracket(c))
-        {
-            c = getOtherBracket(c);
-        }
-    }
     //gets one char from buffer
     char current = 'x';
     int flag = scanf("%c", &current);
@@ -301,16 +289,6 @@ int task3_parenthesis_validator(char c, int i)
     //checks whether current bracket is closed correctly
     if(current == c)
     {
-        //continues the check in case of an open and close bracket at the beginning (example:"()d{ds}a")
-        if(i == 0)
-        {
-            flag = scanf("%c", &current);
-            if(isClosedBracket(current))
-                current = getOtherBracket(current);
-            if(flag == -1 || current == '\n')
-                return 1;
-            return task3_parenthesis_validator(current, 0);
-        }
         return 1;
     }
     //checks whether the bracket is closed incorrectly (example:"(]")
