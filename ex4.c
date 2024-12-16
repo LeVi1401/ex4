@@ -444,8 +444,9 @@ int placeWord(int slots[][POS], char type[], int i, char word[], int usedWords[]
 {
     int row = slots[i][0];
     int column = slots[i][1];
-    int length = slots[i][2];
-    if(strlen(word) != length)
+    int length1 = slots[i][2];
+    int length2 = strlen(word);
+    if(length2 != length1)
     {
         return 0;
     }
@@ -454,9 +455,9 @@ int placeWord(int slots[][POS], char type[], int i, char word[], int usedWords[]
         return 0;
     }
     if(type[i] == 'V')
-        return placeWordVertical(length, word, solve, row, column, 0);
+        return placeWordVertical(length1, word, solve, row, column, 0);
     if(type[i] == 'H')
-        return placeWordHorizontal(length, word, solve, row, column, 0);
+        return placeWordHorizontal(length1, word, solve, row, column, 0);
     return 0;
 }
 int placeWordVertical(int length, char word[], char solve [][SIZE], int row, int column, int j)
