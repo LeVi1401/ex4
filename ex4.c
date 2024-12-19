@@ -286,14 +286,14 @@ int task3_parenthesis_validator(char c, int i)
             return 0;
         return 1;
     }
-    //checks whether current bracket is closed correctly
-    if(current == c)
-    {
-        return 1;
-    }
     //checks whether the bracket is closed incorrectly (example:"(]")
     if(isClosedBracket(current))
     {
+        //checks whether current bracket is closed correctly
+        if(current == c)
+        {
+            return 1;
+        }
         return task3_parenthesis_validator('x', -1);
     }
     //checks whether there is another open bracket before the current one is closed (or it's the first one)
