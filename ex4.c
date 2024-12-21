@@ -45,7 +45,8 @@ int checkAdjacent(int row, int column, char solve[][GRID], int n);
 //prints the solved queen board according to the instructions
 void printSolve(char solve [][GRID], int n);
 //part 5
-int task5_crossword_generator(int slots[][POS], char type[], int slot, char words[][WORD_LEN], int usedWords[], int word, char solve[][SIZE], int slotNum, int wordsNum, int gridSize);
+int task5_crossword_generator(int slots[][POS], char type[], int slot, char words[][WORD_LEN], int usedWords[], int word,
+                              char solve[][SIZE], int slotNum, int wordsNum, int gridSize);
 //places the word in the current spot if its legal and returns whether it succeeded or not
 int placeWord(int slots[][POS], char type[], int i, char word[], int usedWords[], int j, char solve[][SIZE]);
 //places a word vertically if it fits the board position and returns whether it succeeded or not
