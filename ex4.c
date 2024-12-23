@@ -465,7 +465,8 @@ void printSolve(char solve [][GRID], int n)
     }
 }
 //part 5
-int task5_crossword_generator(int slots[][POS], char type[], int slot, char words[][WORD_LEN], int usedWords[], int word, char solve[][SIZE], int slotNum, int wordsNum, int gridSize)
+int task5_crossword_generator(int slots[][POS], char type[], int slot, char words[][WORD_LEN], int usedWords[], int word,
+                              char solve[][SIZE], int slotNum, int wordsNum, int gridSize)
 {
     //makes a copy to the current board position so if the check fails the words that didn't work would be deleted automatically
     char temp[SIZE][SIZE];
